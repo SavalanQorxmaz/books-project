@@ -1,12 +1,12 @@
 from django.urls import path
-from apis.views import BooksAPIView, BookDetailsAPIView
+from apis.views import BooksListAPIView, BookDetailsAPIView, BookDetailsWithSlugAPIView
 
 app_name = "apis"
 
 urlpatterns = [
     path(
         "books/",
-        BooksAPIView.as_view(),
+        BooksListAPIView.as_view(),
         name="books"
     ),
 
@@ -14,5 +14,12 @@ urlpatterns = [
         "books/<int:book_id>/",
         BookDetailsAPIView.as_view(),
         name="book-details"
+    ),
+
+    path(
+        "books/<slug:slug>/",
+        BookDetailsWithSlugAPIView.as_view(),
+        name="book-details-with-slug"
     )
+
 ]

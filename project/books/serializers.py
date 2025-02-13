@@ -10,4 +10,5 @@ class BookSerializer(serializers.ModelSerializer):
             'title',
             'author',
             'description',
+            'slug'
         ]

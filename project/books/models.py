@@ -17,3 +17,9 @@ class Book(models.Model):
         if  f'{str(self.id)}-' not in self.slug:
             self.slug = slugify(f"{self.id}-{self.title}")
             super().save(*args, **kwargs)
+            
+    class Meta:
+        verbose_name = "Book"
+        verbose_name_plural = "Books"
+        ordering = [ "published_date"]
+    
