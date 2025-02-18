@@ -4,20 +4,38 @@ from rest_framework.response import Response
 from utils.paginations import CustomCursorPagination
 
 from books.models import Book
-from books.serializers import BookSerializer
+from books.serializers import BookSerializer, BookCreateSerializer
 
 
 
-class BooksListAPIView(generics.ListCreateAPIView):
-    
-    serializer_class = BookSerializer
-    queryset = Book.objects.all()
+class BookListCreateAPIView(generics.GenericAPIView):
+    # serializer_class = BookSerializer
+    queryset = Book.objects.all() 
     pagination_class = CustomCursorPagination
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return BookCreateSerializer  
+        return BookSerializer  
+    
+    def get_queryset(self):
+        return super().get_queryset()
+
+    # def get(self, request, *args, **kwargs):
+    #     books = self.paginate_queryset(self.get_queryset())
+    #     serializer = self.get_serializer(books, many=True)
+    #     return self.get_paginated_response(serializer.data)
     
     def get(self, request, *args, **kwargs):
         books = self.get_queryset()
         serializer = self.get_serializer(books, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
         
 

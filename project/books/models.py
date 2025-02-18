@@ -11,12 +11,13 @@ class Book(models.Model):
     
     
     def save(self, *args, **kwargs):
-        self.slug = slugify(f"{self.id}-{self.title}")
+        if not self.slug:
+            self.slug = slugify(f"{self.title}-{self.id}" if self.id else self.title)
         super().save(*args, **kwargs)
         
-        if  f'{str(self.id)}-' not in self.slug:
-            self.slug = slugify(f"{self.id}-{self.title}")
-            super().save(*args, **kwargs)
+        # if  f'{str(self.id)}-' not in self.slug:
+        #     self.slug = slugify(f"{self.id}-{self.title}")
+        #     super().save(*args, **kwargs)
             
     class Meta:
         verbose_name = "Book"
