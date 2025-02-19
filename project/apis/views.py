@@ -1,4 +1,4 @@
-from rest_framework import generics, status
+from rest_framework import views, generics, status
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from utils.paginations import CustomCursorPagination
@@ -9,9 +9,8 @@ from books.serializers import BookSerializer, BookCreateSerializer
 
 
 class BookListCreateAPIView(generics.GenericAPIView):
-    # serializer_class = BookSerializer
     queryset = Book.objects.all() 
-    pagination_class = CustomCursorPagination
+    # pagination_class = CustomCursorPagination
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return BookCreateSerializer  
